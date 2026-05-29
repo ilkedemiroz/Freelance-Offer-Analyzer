@@ -79,3 +79,21 @@ Return JSON:
     confidence_label: confidenceMeta.label,
     confidence_context: confidenceMeta.context,
     confidence_breakdown
+
+    
+export default async function handler(req, res) {
+
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Only POST allowed" });
+  }
+
+  const data = req.body;
+
+  console.log("GELEN DATA:", data);
+
+  return res.status(200).json({
+    success: true,
+    message: "API %100 çalışıyor",
+    received: data
+  });
+}
