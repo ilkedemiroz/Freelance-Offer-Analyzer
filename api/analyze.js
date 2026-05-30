@@ -27,21 +27,51 @@ function analyzeOffer(data) {
     }
   }
 
-  return {
-    decision,
-    reason,
-    score: rate ? Math.round(rate) : 50,
-    scoreLabel: "Calculated Offer",
-    effectiveRate: rate,
-    rateZone: rate > 50 ? "high" : rate > 20 ? "medium" : "low",
-    risks: {
-      financial: rate < 20 ? "high" : rate < 50 ? "medium" : "low",
-      scope: data.project_type ? "low" : "high",
-      client: data.client_type === "startup" ? "medium" : "low",
-      time: "low"
-    },
-    acceptance_paths: []
-  };
+  const acceptance_paths = [];
+
+  if (rate !== null && rate < 50) {
+    acceptance_paths.push({
+      title: "Adjust pricing or scope",
+      description: "Consider increasing the budget or reducing deliverables."
+    });
+  }
+
+  if (data.revisions && String(data.revisions).includes("unlimited")) {
+    acceptance_paths.push({
+      title: "Limit revision rounds",
+      description: "Set a clear revision limit to avoid scope creep."
+    });
+  }
+
+  if (data.client_type === "startup") {
+    acceptance_paths.push({
+      title: "Define clear milestones",
+      description: "Split the project into milestones with approval steps."
+    });
+  }
+
+
+return {
+  decision,
+  reason,
+
+  score: rate ? Math.round(rate) : 50,
+  scoreLabel: "Calculated Offer",
+
+  effectiveRate: rate,
+  rateZone: rate > 50 ? "high" : rate > 20 ? "medium" : "low",
+
+  risks: {
+    financial: rate < 20 ? "high" : rate < 50 ? "medium" : "low",
+    scope: data.project_type ? "low" : "high",
+    client: data.client_type === "startup" ? "medium" : "low",
+    time: "low"
+  },
+
+  // ✅ SADECE BİR TANE OLSUN
+  acceptance_paths
+};
+
 }
 
 
