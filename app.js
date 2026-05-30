@@ -264,15 +264,19 @@ decisionCard.innerHTML = `
   /* =====================
      AI / CLIENT MESSAGE
   ====================== */
-  const explanation =
-    typeof result?.ai?.explanation === "string"
-      ? result.ai.explanation
-      : "You can use the message below to clarify scope, pricing, or next steps with the client.";
 
-  const clientMessage =
-    typeof result?.ai?.client_message === "string"
-      ? result.ai.client_message
-      : "";
+
+const explanation =
+  "You can copy and send this message to the client:";
+
+
+
+  
+const clientMessage =
+  typeof result?.ai_message === "string"
+    ? result.ai_message
+    : "";
+
 
   aiCard.innerHTML = `
     <p class="mb-4">${explanation}</p>
