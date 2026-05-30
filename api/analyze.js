@@ -29,50 +29,49 @@ function analyzeOffer(data) {
 
   const acceptance_paths = [];
 
-  
-acceptance_paths.push({
-  title: "Define clear milestones",
-  description: "Break the project into clear approval stages to reduce risk."
-});
-
-
-  if (rate !== null && rate < 50) {
+  // ✅ düşük fiyat
+  if (rate && rate < 50) {
     acceptance_paths.push({
       title: "Adjust pricing or scope",
       description: "Consider increasing the budget or reducing deliverables."
     });
   }
 
+  // ✅ unlimited revisions
   if (data.revisions && String(data.revisions).includes("unlimited")) {
     acceptance_paths.push({
       title: "Limit revision rounds",
       description: "Set a clear revision limit to avoid scope creep."
     });
   }
+
+  // ✅ startup client
+  if (data.client_type === "startup") {
+    acceptance_paths.push({
+      title: "Define clear milestones",
+      description: "Split the project into milestones with approval steps."
+    });
   }
 
+  return {
+    decision,
+    reason,
 
-return {
-  decision,
-  reason,
+    score: rate ? Math.round(rate) : 50,
+    scoreLabel: "Calculated Offer",
 
-  score: rate ? Math.round(rate) : 50,
-  scoreLabel: "Calculated Offer",
+    effectiveRate: rate,
+    rateZone: rate > 50 ? "high" : rate > 20 ? "medium" : "low",
 
-  effectiveRate: rate,
-  rateZone: rate > 50 ? "high" : rate > 20 ? "medium" : "low",
+    risks: {
+      financial: rate < 20 ? "high" : rate < 50 ? "medium" : "low",
+      scope: data.project_type ? "low" : "high",
+      client: data.client_type === "startup" ? "medium" : "low",
+      time: "low"
+    },
 
-  risks: {
-    financial: rate < 20 ? "high" : rate < 50 ? "medium" : "low",
-    scope: data.project_type ? "low" : "high",
-    client: data.client_type === "startup" ? "medium" : "low",
-    time: "low"
-  },
-
-  // ✅ SADECE BİR TANE OLSUN
-  acceptance_paths
-};
-
+    acceptance_paths
+  };
 }
 
 
@@ -93,7 +92,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Invalid JSON" });
   }
 
-  // ✅ burada çağırıyoruz
   const result = analyzeOffer(data);
 
   return res.status(200).json({
