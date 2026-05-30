@@ -90,6 +90,13 @@ form.addEventListener("submit", async e => {
 
     result = await res.json();
 
+decisionCard.innerHTML = `
+  <p style="font-size:20px;">
+    ${result.decision}
+  </p>
+`;
+
+    
     // 🔍 DEBUG – KORUNDU
     console.log("ACCEPTANCE PATHS:", result.acceptance_paths);
 
