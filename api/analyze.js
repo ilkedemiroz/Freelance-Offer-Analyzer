@@ -27,21 +27,19 @@ function analyzeOffer(data) {
     }
   }
 
-  
-// ✅ BURAYA EKLİYORSUN
-let ai_message = "";
+  // ✅ AI MESSAGE (FIXED)
+  let ai_message = "";
 
-if (decision === "REJECT") {
-  ai_message = "Hi, thank you for your offer. Unfortunately, the budget does not align with the expected effort, so I won’t be able to take this project.";
-} else if (decision === "NEGOTIATE") {
-  ai_message = "Hi, thanks for sharing the details. Based on the scope, I’d suggest either increasing the budget or reducing the deliverables. Let’s find a balanced solution that works for both of us.";
-} else if (decision === "ACCEPT") {
-  ai_message = "Hi, this looks like a great fit. I'm happy to proceed with this project and 
-
+  if (decision === "REJECT") {
+    ai_message = "Hi, thank you for your offer. Unfortunately, the budget does not align with the expected effort, so I won’t be able to take this project.";
+  } else if (decision === "NEGOTIATE") {
+    ai_message = "Hi, thanks for sharing the details. Based on the scope, I’d suggest either increasing the budget or reducing the deliverables. Let’s find a balanced solution that works for both of us.";
+  } else if (decision === "ACCEPT") {
+    ai_message = "Hi, this looks like a great fit. I'm happy to proceed with this project and can start as discussed. Let me know the next steps.";
+  }
 
   const acceptance_paths = [];
 
-  // ✅ düşük fiyat
   if (rate && rate < 50) {
     acceptance_paths.push({
       title: "Adjust pricing or scope",
@@ -49,7 +47,6 @@ if (decision === "REJECT") {
     });
   }
 
-  // ✅ unlimited revisions
   if (data.revisions && String(data.revisions).includes("unlimited")) {
     acceptance_paths.push({
       title: "Limit revision rounds",
@@ -57,7 +54,6 @@ if (decision === "REJECT") {
     });
   }
 
-  // ✅ startup client
   if (data.client_type === "startup") {
     acceptance_paths.push({
       title: "Define clear milestones",
@@ -68,7 +64,6 @@ if (decision === "REJECT") {
   return {
     decision,
     reason,
- 
 
     score: rate ? Math.round(rate) : 50,
     scoreLabel: "Calculated Offer",
@@ -84,7 +79,7 @@ if (decision === "REJECT") {
     },
 
     acceptance_paths,
-       ai_message
+    ai_message
   };
 }
 
