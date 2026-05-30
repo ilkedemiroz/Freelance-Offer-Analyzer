@@ -1,4 +1,3 @@
-
 export default async function handler(req, res) {
 
   if (req.method !== "POST") {
@@ -15,25 +14,29 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Invalid JSON" });
   }
 
-  console.log("DATA:", data);
-
-  // ✅ BASİT ANALİZ
   let decision = "NEGOTIATE";
+  let reason = "Orta seviyede teklif";
 
   if (data.price && data.hours) {
     const rate = data.price / data.hours;
 
     if (rate < 20) {
-      decision = "REJECT ❌";
+      decision = "REJECT";
+      reason = "Saatlik ücret çok düşük";
     } else if (rate < 50) {
-      decision = "NEGOTIATE ⚠️";
+      decision = "NEGOTIATE";
+      reason = "Pazarlık yapılabilir";
     } else {
-      decision = "ACCEPT ✅";
+      decision = "ACCEPT";
+      reason = "İyi teklif";
     }
   }
 
   return res.status(200).json({
     success: true,
-    decision: decision
+    decision: {
+      value: decision,
+      reason: reason
+    }
   });
 }
