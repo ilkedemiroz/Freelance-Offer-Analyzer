@@ -29,6 +29,13 @@ function analyzeOffer(data) {
 
   const acceptance_paths = [];
 
+  
+acceptance_paths.push({
+  title: "Define clear milestones",
+  description: "Break the project into clear approval stages to reduce risk."
+});
+
+
   if (rate !== null && rate < 50) {
     acceptance_paths.push({
       title: "Adjust pricing or scope",
@@ -42,12 +49,6 @@ function analyzeOffer(data) {
       description: "Set a clear revision limit to avoid scope creep."
     });
   }
-
-  if (data.client_type === "startup") {
-    acceptance_paths.push({
-      title: "Define clear milestones",
-      description: "Split the project into milestones with approval steps."
-    });
   }
 
 
