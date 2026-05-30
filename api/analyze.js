@@ -68,6 +68,7 @@ if (decision === "REJECT") {
   return {
     decision,
     reason,
+ 
 
     score: rate ? Math.round(rate) : 50,
     scoreLabel: "Calculated Offer",
@@ -82,7 +83,8 @@ if (decision === "REJECT") {
       time: "low"
     },
 
-    acceptance_paths
+    acceptance_paths,
+       ai_message
   };
 }
 
@@ -134,6 +136,7 @@ export default async function handler(req, res) {
     confidence_label: "Calculated",
     confidence_context: "Based on analysis",
 
-    acceptance_paths: result.acceptance_paths
+    acceptance_paths: result.acceptance_paths,
+    ai_message: result.ai_message
   });
 }
