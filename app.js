@@ -246,8 +246,9 @@ decisionCard.innerHTML = `
                 ? "border-green-400 bg-green-50"
                 : "border-gray-300 bg-gray-50"
             }">
-              <strong>${path.title}</strong>
-              <p class="text-sm text-gray-700">${path.summary}</p>
+              
+<strong>${path.title}</strong>
+<p class="text-sm text-gray-700">${path.description || ""}</p>
               <ul class="list-disc pl-5 text-sm text-gray-600">
                 ${(path.steps || []).map(s => `<li>${s}</li>`).join("")}
               </ul>
