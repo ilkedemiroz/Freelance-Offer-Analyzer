@@ -27,6 +27,18 @@ function analyzeOffer(data) {
     }
   }
 
+  
+// ✅ BURAYA EKLİYORSUN
+let ai_message = "";
+
+if (decision === "REJECT") {
+  ai_message = "Hi, thank you for your offer. Unfortunately, the budget does not align with the expected effort, so I won’t be able to take this project.";
+} else if (decision === "NEGOTIATE") {
+  ai_message = "Hi, thanks for sharing the details. Based on the scope, I’d suggest either increasing the budget or reducing the deliverables. Let’s find a balanced solution that works for both of us.";
+} else if (decision === "ACCEPT") {
+  ai_message = "Hi, this looks like a great fit. I'm happy to proceed with this project and 
+
+
   const acceptance_paths = [];
 
   // ✅ düşük fiyat
