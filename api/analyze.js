@@ -1,3 +1,43 @@
+function analyzeOffer(data) {
+  const hours = Number(data.hours);
+  const price = Number(data.price);
+
+  const idealMin = Number(data.ideal_rate_min) || 40;
+  const idealMax = Number(data.ideal_rate_max) || 80;
+
+  const experienceLevel = (data.experience_level || "").toLowerCase();
+  const jobType = (data.job_type || "").toLowerCase();
+
+  const hasValidHours = Number.isFinite(hours) && hours > 0;
+  const hasValidPrice = Number.isFinite(price) && price > 0;
+
+  const effectiveRate =
+    hasValidHours && hasValidPrice ? price / hours : null;
+
+  const hasRevisionPolicy =
+    typeof data.revisions === "string" &&
+    data.revisions.trim().length > 0;
+
+  const hasClientMessage =
+    typeof data.client_message === "string" &&
+    data.client_message.trim().length >= 50;
+
+  const hasScopeSignal =
+    typeof data.job_type === "string" &&
+    data.job_type.trim().length > 0 &&
+    hasClientMessage;
+
+  
+const result = analyzeOffer(data);
+``
+  let reason = "Offer requires clarification";
+  let score = 50;
+  let scoreLabel = "Borderline Offer";
+  let rateZone = "unknown";
+
+
+
+
 export default async function handler(req, res) {
 
   // ✅ Only POST allowed
@@ -52,10 +92,32 @@ export default async function handler(req, res) {
   return res.status(200).json({
     success: true,
 
-    decision: {
-      value: decision,
-      reason: reason
-    },
+   decision: {
+  value: result.decision,
+  reason: result.reason
+},
+
+decision_reasons: result.decision_reasons,
+
+offer_score: {
+  value: result.score,
+  label: result.scoreLabel
+},
+
+financials: {
+  effective_hourly_rate: result.effectiveRate,
+  rate_zone: result.rateZone
+},
+
+pro_insights: {
+  risks: result.risks
+},
+
+confidence_score: result.score,
+confidence_label: "Calculated",
+confidence_context: "Based on analysis",
+
+acceptance_paths: result.acceptance_paths
 
     decision_reasons: [reason],
 
