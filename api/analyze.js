@@ -11,6 +11,19 @@ function analyzeOffer(data) {
     ? price / hours
     : null;
 
+  
+
+const baseRate = Number(data.ideal_rate_min) > 0
+  ? Number(data.ideal_rate_min)
+  : 50;
+
+  
+const relativeScore = rate
+  ? Math.min(300, Math.round((rate / baseRate) * 100))
+  : 0;
+
+
+
   let decision = "NEGOTIATE";
   let reason = "Average offer";
 
@@ -79,7 +92,8 @@ function analyzeOffer(data) {
     },
 
     acceptance_paths,
-    ai_message
+    ai_message,
+    relativeScore,
   };
 }
 
@@ -107,7 +121,6 @@ export default async function handler(req, res) {
 const confidence = result.effectiveRate
   ? Math.min(90, Math.max(40, 60 + result.effectiveRate / 2))
   : 40;
-``
 
 
   return res.status(200).json({
@@ -119,11 +132,12 @@ const confidence = result.effectiveRate
     },
 
     decision_reasons: [result.reason],
+     
+offer_score: {
+  value: result.relativeScore,
+  label: "Relative to your target (%)"
+},
 
-    offer_score: {
-      value: result.score,
-      label: result.scoreLabel
-    },
 
     financials: {
       effective_hourly_rate: result.effectiveRate,
