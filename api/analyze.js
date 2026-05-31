@@ -81,30 +81,28 @@ const rateZone =
   }
 
   
+
 let overallLabel = "Average";
 
 // ✅ yüksek fiyat + düşük risk
-
 if (
   relativeScore > 150 &&
   rateZone === "high" &&
- 
-!(
-  String(data.revisions)
-    .toLowerCase()
-    .includes("unlimited")
-)
+  !(
+    String(data.revisions)
+      .toLowerCase()
+      .includes("unlimited")
+  )
 ) {
   overallLabel = "Excellent offer";
 }
 
-
-
-
-}
-
 // ✅ yüksek fiyat ama riskli
-else if (relativeScore > 150 && (data.revisions && data.revisions.includes("unlimited"))) {
+else if (
+  relativeScore > 150 &&
+  data.revisions &&
+  data.revisions.includes("unlimited")
+) {
   overallLabel = "High paying but risky";
 }
 
@@ -122,6 +120,7 @@ else if (relativeScore > 80) {
 else {
   overallLabel = "Low value offer";
 }
+
 
 
   return {
