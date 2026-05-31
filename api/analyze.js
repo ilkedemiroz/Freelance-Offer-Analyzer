@@ -22,6 +22,12 @@ const relativeScore = rate
   ? Math.min(300, Math.round((rate / baseRate) * 100))
   : 0;
 
+  
+const rateZone =
+  rate > 50 ? "high" :
+  rate > 20 ? "medium" :
+  "low";
+
 
 
   let decision = "NEGOTIATE";
@@ -74,6 +80,38 @@ const relativeScore = rate
     });
   }
 
+  
+let overallLabel = "Average";
+
+// ✅ yüksek fiyat + düşük risk
+if (relativeScore > 150 && rateZone === "high" && data.revisions !== "unlimited revisions") {
+  overallLabel = "Excellent offer";
+
+
+
+}
+
+// ✅ yüksek fiyat ama riskli
+else if (relativeScore > 150 && (data.revisions && data.revisions.includes("unlimited"))) {
+  overallLabel = "High paying but risky";
+}
+
+// ✅ iyi teklif
+else if (relativeScore > 110) {
+  overallLabel = "Good offer";
+}
+
+// ✅ borderline
+else if (relativeScore > 80) {
+  overallLabel = "Fair offer";
+}
+
+// ✅ kötü
+else {
+  overallLabel = "Low value offer";
+}
+
+
   return {
     decision,
     reason,
@@ -94,6 +132,7 @@ const relativeScore = rate
     acceptance_paths,
     ai_message,
     relativeScore,
+    overallLabel
   };
 }
 
@@ -133,10 +172,12 @@ const confidence = result.effectiveRate
 
     decision_reasons: [result.reason],
      
+
 offer_score: {
-  value: result.relativeScore,
-  label: "Relative to your target (%)"
+  value: result.relativeScore + "%",
+  label: result.overallLabel
 },
+
 
 
     financials: {
