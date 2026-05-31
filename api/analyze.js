@@ -94,7 +94,7 @@ if (
     .toLowerCase()
     .includes("unlimited")
 )
- {
+) {
   overallLabel = "Excellent offer";
 }
 
