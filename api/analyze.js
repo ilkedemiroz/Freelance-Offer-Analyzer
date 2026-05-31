@@ -84,8 +84,20 @@ const rateZone =
 let overallLabel = "Average";
 
 // ✅ yüksek fiyat + düşük risk
-if (relativeScore > 150 && rateZone === "high" && data.revisions !== "unlimited revisions") {
+
+if (
+  relativeScore > 150 &&
+  rateZone === "high" &&
+ 
+!(
+  String(data.revisions)
+    .toLowerCase()
+    .includes("unlimited")
+)
+ {
   overallLabel = "Excellent offer";
+}
+
 
 
 
