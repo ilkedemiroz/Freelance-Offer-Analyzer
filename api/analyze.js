@@ -103,6 +103,13 @@ export default async function handler(req, res) {
 
   const result = analyzeOffer(data);
 
+  
+const confidence = result.effectiveRate
+  ? Math.min(90, Math.max(40, 60 + result.effectiveRate / 2))
+  : 40;
+``
+
+
   return res.status(200).json({
     success: true,
 
@@ -127,7 +134,7 @@ export default async function handler(req, res) {
       risks: result.risks
     },
 
-    confidence_score: result.score,
+    confidence_score: Math.round(confidence),
     confidence_label: "Calculated",
     confidence_context: "Based on analysis",
 
